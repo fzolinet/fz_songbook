@@ -1,0 +1,50 @@
+<?php
+require_once "fz_songbook_define.inc";
+/**
+ * Implementation of hook_install().
+ */
+function fz_songbook_install() {
+  variable_set ( 'menu_rebuild_needed', TRUE );
+  variable_set ( 'fz_songbook_t', '' ); // Title
+  variable_set ( 'fz_songbook_st', '' ); // Subtitle
+  variable_set ( 'fz_songbook_font', '' ); // Font type
+  variable_set ( 'fz_songbook_chord', '' ); // color of chord
+  variable_set ( 'fz_songbook_comment', '' ); // style of comment
+  variable_set ( "fz_songbook_soc", '' );
+  variable_set ( "fz_songbook_sot", '' );
+  variable_set ( "fz_songbook_soh", '' );
+  variable_set ( "fz_songbook_define", '' );
+  variable_set ( "fz_songbook_files", 'public://songbook'); //Default place of songbook files
+  if (module_exists ( "taxonomy" )) {
+    $vocab = ( object ) array (
+        'name' => 'FZ Songbook vocabulary',
+        'description' => 'This is the FZ songbook vocabulary',
+        'machine_name' => SONGBOOK_VOCAB
+    );
+    taxonomy_vocabulary_save ( $vocab );
+    variable_set ( 'fz_songbook_taxonomy', true );
+  }
+}
+
+/**
+ * Uninstall function of FZ Slogan and Title
+ */
+function fz_songbook_uninstall() {
+  variable_del ( 'fz_songbook_t' );
+  variable_del ( 'fz_songbook_st' );
+  variable_del ( 'fz_songbook_font' );
+  variable_del ( 'fz_songbook_chord' );
+  variable_del ( 'fz_songbook_comment' );
+  variable_del ( 'fz_songbook_soc' );
+  variable_del ( 'fz_songbook_sot' );
+  variable_del ( 'fz_songbook_soh' );
+  variable_del ( "fz_songbook_define" );
+  variable_del ( "fz_songbook_files" );
+  if (module_exists ( "taxonomy" )) {
+    $vocab = taxonomy_vocabulary_machine_name_load ( 'fz_songbook_vocab' );
+    if ($vocab) {
+      taxonomy_vocabulary_delete ( $vocab->vid );
+    }
+    variable_del ( 'fz_songbook_taxonomy' );
+  }
+}

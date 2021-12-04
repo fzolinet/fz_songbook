@@ -1,0 +1,56 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>The FZ SongBook trxt filter modul</title>
+<p>The idea came from <a href="https://www.linkesoft.com/songbook/" target="_blank">Linkesoft Songbook</a></p>
+<h2>This module you can use two mode</h2>
+<ul>
+<li>1. [songbook src="path-to-file/filename.pro" /]<br/>
+The filter read the songbook file and shows it just like a songbook in the body of node.
+</li>
+<li>
+2. [songbook]...songbook text... [/songbook]<br/>
+The filter module shows the text between the tags like a songbook text in the node.
+</li>
+</ul>
+<p>In the songbook file or text you can mix the lyrics of song and the accords or any other informations, tabs, notes, etc.</p>
+<h2>About the songbook text / file</h2>
+
+<h3>The header of songbook text</h3>
+<p>In the header you can use tags</p>
+<ul>
+<li>{title:....} or {t:....} - the title of song</li>
+<li>{subtitle: ...} or {st: ...} - the subtitle of song, for example the name of composer, lyricist</li>
+<li>{time:...} - the time of song</li>
+<li>{key:...}  - the key of the song</li>
+<li>{tag:....} - the tag can be anything, for example rock, Something Blues Band...	</li>
+<li>{musicpath:.....} - the place of sound material. It can:
+  <ul>
+    <li>http://,  https://,  ftp:// - from the internet, for example {musicpath:<a href="https://www.youtube.com/watch?v=WHtWs4wiFCs" target="_blank">https://www.youtube.com/watch?v=WHtWs4wiFCs</a>}.</li>
+    <li>public:// - from Drupal filesystem public folder. for example: {musicpath:public://songbook/something.mp3}</li>
+    <li>file:// - From settings of fz_songbook,  tipically public://, {musicpath:file://songbook/something.mp3}</li>
+    <li>something /folder/filename.mp3 - From root of Drupal. For example:  {musicpath:/songbook/something.mp3}</li> 
+
+    <li>If <a href="https://fzolee.hu/download/smplphotoalbum" target="_blank">SmplPhotoalbum</a> installed the path will be a subfolder of Smplphotoalbum root folder.
+    <ul>
+      <li>/path-to-smplphotoalbum/v.php?i=/Folder/filename.mp3 will shows only the filename, but the link helps the play this song. For Example: {musicpath:/sites/all/modules/smplphotoalbum/v.php?i=/Folder/filename.mp3}
+	  </li> 
+      <li>/folder/filename.mp3 - shows only filename but the link help to play the song with  smplphotoalbum. For example: {musicpath:/folder/filename.mp3} 
+      </li>
+    </ul>
+    </li>
+  </ul>
+</li>
+</ul>
+<h3>The body of the songbook text</h3>
+<p>The text could be:</p>
+<ul>
+  <li>[ChordName] - it shows above the text the right chord sign in other color. For Example The [Em7]love is beautyful</li>
+  <li>{c:.....} - is a comment. {c:Refrain}</li>
+  <li>{soc} .......{eoc} - start of comment , end of comment.
+  <li>{sot} .......{eot} - start of tabulature, end of tabulature
+  <li>{sog} .......{eog} - start of <a href="https://www.chordpro.org/chordpro/Directives-env_grid.html" target="_blank">chord grid</a>, end of chord grid
+  <li>
+
+</body>
+</html>

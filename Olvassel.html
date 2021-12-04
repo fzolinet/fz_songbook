@@ -1,0 +1,55 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Az FZ SongBook text filter modul leírása</title>
+</head>
+<body>
+<p>Az ötletet <a href="https://www.linkesoft.com/songbook/" target="_blank">Linkesoft Songbook</a> program adta</p>
+<h2>Két módban lehet megjeleníteni songbook szöveget</h2>
+<ul>
+<li>1. [songbook src="path-to-file/filenév.pro"]<br/>
+A filter beolvassa a songbook fájlt a könyvtárstruktúrából és a node részévé válik.
+</li>
+<li>
+2. [songbook]...songbook szöveg... [/songbook]<br/>
+A filter a node szövegének megfelelő részét megjeleníti, songbook szövegként.
+</li>
+</ul>
+<p>A Songbook szöveg a dalok szövegét és akkordjait, illetve egyéb jelzéseit tartalmazhatja.</p>
+<h2>A Songbook szöveg formátuma</h2>
+
+<h3>A Songbook szöveg fejléce</h3>
+<p>A fejlécben az alábbi tag-ek használhatók</p>
+<ul>
+<li>{title:....} or {t:....} - A dal címe</li>
+<li>{subtitle: ...} or {st: ...} - A dal alcíme. Például a szerző megjelenítésére való</li>
+<li>{time:...} - A dal hossza</li>
+<li>{key:...}  - A dal hangneme. Ezt modulálásra lehet használni. Ha nincsen kitöltve, akkor a dal első akkordja lesz a modulálás alapja</li>
+<li>{tag:....} - Ezzel sorolhatjuk be kategóriákba a dalt. Pl. rock, Valami Blues Band...	</li>
+<li>{musicpath:.....} - A hangzó anyag elérési útja. It can:
+  <ul>
+    <li>http://,  https://,  ftp:// - Ha az interneten elérhető valahol. Pl.{musicpath:<a href="https://www.youtube.com/watch?v=WHtWs4wiFCs" target="_blank">https://www.youtube.com/watch?v=WHtWs4wiFCs</a>}.</li>
+    <li>public:// - A Drupal fájlrendszer publikus könyvtára. Pl. {musicpath:public://songbook/something.mp3}</li>
+    <li>file:// - A Drupal fájlrendszernek a Songbook fájlok tárolására szolgáló könyvtára, tipikusan public://songbook, {musicpath:file://something.mp3}</li>
+    <li>Valamilyen könyvtár a féjlrendszerben /folder/filename.mp3 - A Drupal gyökérkönyvtárától számít. Pl. {musicpath:/songbook/something.mp3}</li> 
+    <li>Ha telepítve van a <a href="https://fzolee.hu/download/smplphotoalbum" target="_blank">Simple Photoalbum</a> modul, akkor az útvonal a Simple Photoalbum modul gyökérkönyvtárát jelenti.<br>
+    Ez azért hasznos, mert ez a modul számlálja a letöltéseket<ul>
+      <li>{musicpath:/modulelérési útja/v.php?i=/Folder/filename.mp3} csak a fáájlnevet jeleníti meg, de a link segítségével lejátszható a fájl.</li> 
+      <li>{musicpath:/folder/filename.mp3} - csak a fájlnevet jeleníti meg és hozzáteszi a megfelelő elérési utat, hogy lejátszható legyen a fájl. A fájl elérési útvonala a Simple Photoalbum gyökérkönyvtárától számít</li>
+    </ul>
+    </li>
+  </ul>
+</li>
+</ul>
+<h3>A Songbook szöveg további részei</h3>
+<p>Ha a szövegben az alábbiak vannak:</p>
+<ul>
+  <li>[Akkordjelzés] - A szöveg fölött jeleníti meg az akkord jelét. Pl. [Em7]love is beautyful</li>
+  <li>{c:.....} - megjegyzés. {c:Refrén}</li>
+  <li>{soc} .......{eoc} - Több soros komment esetén a komment eleje és vége.
+  <li>{sot} .......{eot} - Tabulatúra esetén a tabulatúra szakasz eleje és vége.
+  <li>{sog} .......{eog} - <a href="https://www.chordpro.org/chordpro/Directives-env_grid.html" target="_blank">chord grid leírása</a> egy új jelzésfajta eleje és vége
+  <li>
+
+</body>
+</html>

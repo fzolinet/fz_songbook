@@ -1,0 +1,12 @@
+name = FZ Songbook
+description = "The files are songbooks - a new filter"
+core = 7.x
+package = FZ
+project = fz_songbook
+configure = admin/config/fz/fz_songbook
+
+; Information added by drupal.org packaging script on 2015-12-24
+version = "7.x-1.51"
+core = "7.x"
+
+datestamp = "1615706610"

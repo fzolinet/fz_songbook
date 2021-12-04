@@ -1,0 +1,17 @@
+Todo:
+~~~~~
+- change the key of the song online
+History:
+~~~~~~~~
+
+- 2020.01.19
+  In one file can show more musicpath, for exmple youtube link, files from the public://
+  folder or integrated with smplphotoalbum from root folder of smplphotoalbum.
+  optimalization of code
+  new Idea
+
+- 2019.12.26
+  Shows the tags / musicpath / etc. of songbook files.
+
+- 2019.02.04
+  Shows the songbook files. Chords are above the text, almost the right place.

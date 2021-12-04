@@ -1,0 +1,65 @@
+@CHARSET "UTF-8";
+
+.sb_text, .sb_chord {
+	Font-family: Courier;
+	border:none;
+	font-size: 0.8em;
+	line-height: 1em;
+	background: none;
+	padding: 0 0;
+}
+
+.sb_title {
+	font-size: 1.4em;
+	margin: 1em 0em;
+	line-height: 1em;
+}
+
+.sb_subtitle {
+	font-size: 1.1em;
+	font-style: italic;
+}
+
+.sb_key, 
+.sb_tag, 
+.sb_musicpath {
+	font-style: bold;
+}
+ {
+	font-style: bold;
+}
+
+.sb_chord {
+	color: blue;
+	vertical-align: bottom;
+}
+
+/* Comments*/
+.sb_comment {
+	background-color: #444;
+	color: #eee;
+}
+/* Text of comments */
+.sb_soc {
+	border-left: 1px solid blue;
+	padding-left: 0.5em;
+}
+
+/* Text of highlights */
+.sb_hi {
+	border-left: 1px solid blue;
+	padding-left: 0.5em;
+	background-color: #feff64;
+}
+/* Text of tabulatures*/
+
+.sb_tab, .sb_cg {
+	line-height: 1em;
+	border-left: 1px solid blue;
+	padding-left: 0.5em;
+	background-color: #eeeedd;
+	font-family:courier;
+}
+.sb_cg{
+	background-color: #ddeeee;
+}

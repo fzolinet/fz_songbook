@@ -1,0 +1,236 @@
+<?php
+include "fz_songbook_define.inc";
+include "fz_songbook_substitute.inc";
+
+// Be sure of the path to the class
+/**
+ * Megjeleniti a module help informaciokat
+ *
+ * @param unknown_type $path
+ * @param unknown_type $arg
+ */
+function fz_songbook_help($path, $arg) {
+  global $language;
+  $output = '';
+  $mp = drupal_get_path ( 'module', 'fz_songbook' );
+  drupal_add_css ( $mp . "/fz_songbook.css" );
+  switch ($path) {
+    
+      case "admin/help/fz_songbook" :
+          break;
+      case "admin/help#fz_songbook" :
+      $output = '<h3>' . t ( 'About' ) . '</h3>';
+      $path = drupal_get_path ( 'module', 'fz_songbook' ) . '/fz_songbook.info';
+      $info = drupal_parse_info_file ( $path );
+      $output .= 'Author: <a href="http://www.fzolee.hu">Zoltan Fabian</a><br/>';
+      $output .= t ( 'version' ) . ': ' . $info ['version'] . '<br/>';
+      $output .= t ( 'compiled' ) . ': ' . date ( 'Y.m.d', $info ['datestamp'] );
+      $output .= "<p>" . t ( "FZ Songbook shows the songbook files." ) . "</p>";
+      $lang_name = $language->language;
+      if ($lang_name == "hu") {
+        $output .= file_get_contents ( drupal_get_path ( 'module', 'fz_songbook' ) . "/Olvassel.html" );
+      } else {
+        $output .= file_get_contents ( drupal_get_path ( 'module', 'fz_songbook' ) . "/Readme.html" );
+      }
+      break;
+  }
+  return $output;
+}
+
+/**
+ * Valid permissions for this module
+ *
+ * @return array An array of valid permissions for the on this module
+ *
+ */
+function fz_songbook_perm() {
+  return array (
+      'access fz_songbook',
+      'administer fz_songbook',
+      'edit fz_songbook'
+  );
+}
+function fz_songbook_access() {
+  return user_access ( "administer fz_songbook" ) && user_access ( "edit fz_songbook" );
+}
+
+/**
+ * Hook menu implementalasa
+ */
+function fz_songbook_menu() {
+  $items = array ();
+  
+  $items ['admin/config/fz/fz_songbook'] = array (
+      'title' => 'Songbook',
+      'description' => t ( 'Description of your Songbook settings control' ),
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array (
+          'fz_songbook_settings'
+      ),
+      'access arguments' => array (
+          'administer site configuration'
+      ),
+      'type' => MENU_NORMAL_ITEM,
+      'weight' => 1
+  );
+  
+  $items ['admin/config/fz/fz_songbook/settings'] = array (
+      'title' => 'Songbook',
+      'description' => t ( 'Description of your Songbook settings control' ),
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array (
+          'fz_songbook_settings'
+      ),
+      'access arguments' => array (
+          'administer site configuration'
+      ),
+      'type' => MENU_DEFAULT_LOCAL_TASK,
+      'weight' => 2
+  );
+  return $items;
+}
+function fz_songbook_settings() {
+  global $base_url;
+  $form = array ();
+  
+  $form ['leiras'] = array (
+      '#markup' => "You can change the styles of FZ Songbook. The original styles defined in fz_songbook.css"
+  );
+  // format of title font-size
+  $stitle = variable_get ( 'fz_songbook_t', 'font-size: 1.5em;' );
+  $form ['fz_songbook_t'] = array (
+      '#type' => 'textfield',
+      '#title' => t ( 'Format of title of song' ),
+      '#default_value' => $stitle,
+      '#description' => '<h2 class="sb_title" style="' . $stitle . '">' . t ( "Format of title of song" ) . '</h2>'
+  );
+  $ssubtitle = variable_get ( 'fz_songbook_st', 'font-size: 1.5em;' );
+  
+  // format of subtitle font-size
+  $form ['fz_songbook_st'] = array (
+      '#type' => 'textfield',
+      '#title' => t ( 'Format of subtitle of song' ),
+      '#default_value' => $ssubtitle,
+      '#description' => '<h3 class="sb_subtitle" style="' . $ssubtitle . '">' . t ( "Format of subtitle of song" ) . '</h3>'
+  );
+  
+  // font of text
+  $sfont = variable_get ( 'fz_songbook_font', 'Font-family: Courier;' );
+  $form ['fz_songbook_font'] = array (
+      '#type' => 'textfield',
+      '#title' => t ( 'Font of text of song' ),
+      '#default_value' => $sfont,
+      '#description' => '<span class="sb_text" style="' . $sfont . '">' . t ( "Set font of song text" ) . '</span>'
+  );
+  
+  // format of chords
+  $schord = variable_get ( 'fz_songbook_chord', 'Color: blue;' );
+  $form ['fz_songbook_chord'] = array (
+      '#type' => 'textfield',
+      '#title' => t ( 'style of chords' ),
+      '#default_value' => $schord,
+      '#description' => '<span class="sb_chord" style="' . $schord . '">' . t ( "Style the chords in song" ) . '</span>'
+  );
+  
+  // format of comment
+  $scomment = variable_get ( 'fz_songbook_comment', 'Color: #eee;background-color: #333;' );
+  $form ['fz_songbook_comment'] = array (
+      '#type' => 'textfield',
+      '#title' => t ( 'Style of comments' ),
+      '#default_value' => $scomment,
+      '#description' => '<span class="sb_comment" style="' . $scomment . '">' . t ( "Style of comment in song" ) . '</span>'
+  );
+  // format of comment
+  $ssoc = variable_get ( 'fz_songbook_soc', 'border-left: 1px solid blue; padding-left: 0.5em;' );
+  $form ['fz_songbook_soc'] = array (
+      '#type' => 'textfield',
+      '#title' => t ( 'Style of comment of more rows' ),
+      '#default_value' => $ssoc,
+      '#description' => '<div class="sb_soc" style="' . $ssoc . '">' . t ( "Style of comment of more rows" ) . '</div>'
+  );
+  
+  $ssot = variable_get ( 'fz_songbook_sot', 'border-left: 1px solid blue; padding-left: 0.5em;' );
+  $form ['fz_songbook_sot'] = array (
+      '#type' => 'textfield',
+      '#title' => t ( 'Style of comment lines tabs' ),
+      '#default_value' => $ssot,
+      '#description' => '<div class="sb_tab" style="' . $ssot . '">' . t ( "Style of comment of more tabs" ) . '</div>'
+  );
+  
+  $ssoh = variable_get ( 'fz_songbook_soh', 'border-left: 1px solid blue; padding-left: 0.5em;' );
+  $form ['fz_songbook_soh'] = array (
+      '#type' => 'textfield',
+      '#title' => t ( 'Style of highlite markers' ),
+      '#default_value' => $ssoh,
+      '#description' => '<div class="sb_soh" style="' . $ssoh . '">' . t ( "Style of highlite markers" ) . '</div>'
+  );
+  
+  $ssoh = variable_get ( 'fz_songbook_soh', 'border-left: 1px solid blue; padding-left: 0.5em;' );
+  $form ['fz_songbook_soh'] = array (
+      '#type' => 'textfield',
+      '#title' => t ( 'Style of highlite markers' ),
+      '#default_value' => $ssoh,
+      '#description' => '<div style="' . $ssoh . '">' . t ( "Style of highlite markers" ) . '</div>'
+  );
+
+  $starget = variable_get("fz_songbook_musicpath_target",'target="_blank"');
+  $form['fz_songbook_musicpath_target'] = array(
+      '#type' => 'textfield',
+      '#title' => t ( 'Target of musicpath' ),
+      '#default_value' => $starget,
+	  '#description' => 'Target of musicpath'
+   );
+  
+  $tax = module_exists ( 'taxonomy' );
+  $is_tax = variable_get ( "fz_songbook_taxonomy", true );
+  $form ['fz_songbook_taxonomy'] = array (
+      '#type' => 'checkbox',
+      '#title' => t ( 'FZ Songbook taxonomy using' ),
+      '#default_value' => $is_tax,
+      '#disabled' => (! $tax ? 'disabled' : ''),
+      '#description' => t ( 'This module can use Drupal taxonomy system in FZ Songbook module' )
+  );
+  
+  if ($tax && $is_tax) {
+    $vocab = taxonomy_vocabulary_machine_name_load ( 'fz_songbook_vocab' );
+    if (! $vocab) {
+      $songbook_vocab = ( object ) array (
+          'name' => 'FZ Songbook vocabulary',
+          'description' => 'This is the FZ Songbook vocabulary',
+          'machine_name' => 'fz_songbook_vocab'
+      );
+      taxonomy_vocabulary_save ( $songbook_vocab );
+    }
+  }
+  
+  $sb_files = variable_get('fz_songbook_files','');
+  $form['fz_songbook_files'] = array(
+      '#type' => 'textfield',
+      '#title' => t ( 'The dafult place of songbook file' ),
+      '#default_value' => $sb_files,
+      '#description' => 'If <strong>public://</strong> the place is the default Drupal <strong>public</strong> file place<br/>
+      If <strong>private://</strong> then it vill be the default Drupal <strong>private</strong> filesystem<br>
+      <strong>&ltroot&gt</strong> the path will be the Drupal root folder<br />
+      If this place is empty and in the songbook "tag" the filepath beginning / or [on Windows ] C:\\ D:/ or similar the path is absolute path from server file system'
+  );
+  
+  $form = system_settings_form ( $form );
+  return $form;
+}
+function fz_songbook_filter_info() {
+  $filters ['fz_songbook_filter'] = array (
+      'title' => t ( 'FZ Songbook filter' ),
+      'description' => t ( 'Substitutes a special [Songbook|filepath] tag or [songbook] .... [/songbook].' ),
+      'cache' => FALSE,
+      'process callback' => 'fz_songbook_substitute',
+      'tips callback' => 'fz_songbook_filter_tips'
+  );
+  return $filters;
+}
+function fz_songbook_filter_tips($filter, $format, $long) {
+  if ($long) {
+    return t ( 'The FZ Songbook filter views the chords and other things of a songbook file / text.' );
+  } else {
+    return t ( '' );
+  }
+}
